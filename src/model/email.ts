@@ -55,6 +55,10 @@ export class Email {
             parsedEmail.text,
         );
     }
+
+    toString() {
+        return `${this.from} -> ${this.to} \n\n # ${this.subject} \n\n ${this.body}`;
+    }
 }
 
 class InvalidInputException extends Error {

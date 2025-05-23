@@ -31,14 +31,14 @@ export class DefaultLogger extends Logger {
     }
 
     protected override _info(text: string, ...args: any[]): Promise<void> {
-        return this.writeToFile(LoggerLevel.INFO, text, args);
+        return this.writeToFile(LoggerLevel.INFO, text, ...args.map(a => a.toString()));
     }
 
     protected override _error(text: string, ...args: any[]): Promise<void> {
-        return this.writeToFile(LoggerLevel.ERROR, text, args);
+        return this.writeToFile(LoggerLevel.ERROR, text, ...args.map(a => a.toString()));
     }
 
     protected override _fatal(text: string, ...args: any[]): Promise<void> {
-        return this.writeToFile(LoggerLevel.FATAL, text, args);
+        return this.writeToFile(LoggerLevel.FATAL, text, ...args.map(a => a.toString()));
     }
 }
