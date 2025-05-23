@@ -1,9 +1,16 @@
+import { readFileSync } from 'fs';
+import { config } from 'dotenv';
+
 import { Router } from './handler/router';
 import { Email } from './model/email';
 import { DefaultLogger } from './util/default-logger';
 
+config();
+
 const logger = new DefaultLogger(process.env.LOGS_PATH ?? './logs.txt');
-const [_, emailBody] = process.argv;
+
+const emailBody = readFileSync(0).toString();
+
 if (!emailBody) {
     logger.fatal('No email body passed');
 }
