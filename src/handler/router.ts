@@ -1,8 +1,8 @@
 import { Email } from '../model/email';
-import { DefaultLogger } from '../util/default-logger';
+import { SenderOffice365 } from '../sender/sender-0365';
 import { Logger } from '../util/logger';
 import { DummyFilter } from './filter';
-import { EmtpyHandler } from './handler';
+import { O365Handler } from './handler';
 
 export class Router {
     constructor(
@@ -18,9 +18,10 @@ export class Router {
      * @todo implement real logic
      */
     public route(email: Email) {
-        new EmtpyHandler(
+        new O365Handler(
             new DummyFilter(),
             this.logger,
+            new SenderOffice365(this.logger),
         ).handle(email);
     }
 }

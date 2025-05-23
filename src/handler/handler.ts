@@ -1,11 +1,12 @@
 import { Email } from '../model/email';
+import { Sender } from '../sender/sender';
 import { Logger } from '../util/logger';
 import { Filter } from './filter';
 
 export abstract class Handler {
     constructor(
-        private filter: Filter,
-        private logger: Logger,
+        protected filter: Filter,
+        protected logger: Logger,
     ) {}
 
     public async handle(email: Email) {
@@ -26,5 +27,28 @@ export abstract class Handler {
 
 export class EmtpyHandler extends Handler {
     protected override async handlePass(email: Email): Promise<void> {}
+    protected override async handleDrop(email: Email): Promise<void> {}
+}
+
+export class O365Handler extends Handler {
+    constructor(
+        filter: Filter,
+        logger: Logger,
+        private sender: Sender,
+    ) {
+        super(filter, logger);
+    }
+
+    protected override async handlePass(email: Email): Promise<void> {
+        const res = await this.sender.send(email);
+
+        if (res.success == false) {
+            await this.logger.error(
+                'Failed to send email',
+                email,
+            );
+        }
+    }
+
     protected override async handleDrop(email: Email): Promise<void> {}
 }
