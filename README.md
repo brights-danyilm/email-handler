@@ -25,6 +25,13 @@ putting an email to an inbox
 
 ## App setup
 
+Set variables in .env:
+
+- `LOGS_PATH` - path to file to write logs to
+- `SMTP_0365_HOST` - host for O365 org SMTP server. Like `youdomain-com.mail.protection.outlook.com`
+(refer to [docs](https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365#configure-a-tls-certificate-based-connector-for-smtp-relay))
+- `SMTP_O365_PORT` - the same as above, 25 by default
+
 - `npm run i`
 - `npm run build`
 
