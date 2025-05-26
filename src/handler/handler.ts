@@ -30,7 +30,7 @@ export class EmtpyHandler extends Handler {
     protected override async handleDrop(email: Email): Promise<void> {}
 }
 
-export class O365Handler extends Handler {
+export class GeneralHandler extends Handler {
     constructor(
         filter: Filter,
         logger: Logger,
