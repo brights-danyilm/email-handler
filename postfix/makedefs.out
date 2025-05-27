@@ -1,0 +1,65 @@
+# Do not edit -- this file documents how Postfix was built for your machine.
+#----------------------------------------------------------------
+# Start of summary of user-configurable 'make makefiles' options.
+# CCARGS=-DDEBIAN -DHAS_PCRE=2  -DHAS_LDAP -DUSE_LDAP_SASL -DHAS_SQLITE -DMYORIGIN_FROM_FILE  -DHAS_CDB -DHAS_LMDB -DHAS_MYSQL -I/usr/include/mysql -DHAS_PGSQL -I/usr/include/postgresql -DHAS_SQLITE -DHAS_SSL -I/usr/include/openssl -DUSE_SASL_AUTH -I/usr/include/sasl -DUSE_CYRUS_SASL -DUSE_TLS
+# AUXLIBS=-lssl -lcrypto -lsasl2 -lpthread
+# AUXLIBS_CDB=-lcdb
+# AUXLIBS_LDAP=-lldap -llber
+# AUXLIBS_LMDB=-llmdb
+# AUXLIBS_MYSQL=-lmysqlclient
+# AUXLIBS_PCRE=-lpcre2-8
+# AUXLIBS_PGSQL=-lpq
+# AUXLIBS_SQLITE=-lsqlite3
+# shared=yes
+# dynamicmaps=yes
+# pie=yes
+# daemon_directory=/usr/lib/postfix/sbin
+# html_directory=/usr/share/doc/postfix/html
+# manpage_directory=/usr/share/man
+# readme_directory=/usr/share/doc/postfix
+# End of summary of user-configurable 'make makefiles' options.
+#--------------------------------------------------------------
+# System-dependent settings and compiler/linker overrides.
+SYSTYPE	= LINUX5
+_AR	= ar
+ARFL	= rv
+_RANLIB	= ranlib
+SYSLIBS	= -pie -lssl -lcrypto -lsasl2 -lpthread -ldb -lnsl -lresolv -ldl -licui18n -licuuc -licudata 
+AUXLIBS_CDB = -lcdb
+AUXLIBS_LDAP = -lldap -llber
+AUXLIBS_LMDB = -llmdb
+AUXLIBS_MYSQL = -lmysqlclient
+AUXLIBS_PCRE = -lpcre2-8
+AUXLIBS_PGSQL = -lpq
+AUXLIBS_SQLITE = -lsqlite3
+CC	= gcc -fPIC -I. -I../../include -DDEBIAN -DHAS_PCRE=2 -DHAS_LDAP -DUSE_LDAP_SASL -DHAS_SQLITE -DMYORIGIN_FROM_FILE -DHAS_CDB -DHAS_LMDB -DHAS_MYSQL -I/usr/include/mysql -DHAS_PGSQL -I/usr/include/postgresql -DHAS_SQLITE -DHAS_SSL -I/usr/include/openssl -DUSE_SASL_AUTH -I/usr/include/sasl -DUSE_CYRUS_SASL -DUSE_TLS -DHAS_DEV_URANDOM -DDEF_DAEMON_DIR=\"/usr/lib/postfix/sbin\" -DDEF_HTML_DIR=\"/usr/share/doc/postfix/html\" -DDEF_MANPAGE_DIR=\"/usr/share/man\" -DDEF_README_DIR=\"/usr/share/doc/postfix\" -DUSE_DYNAMIC_LIBS -DUSE_DYNAMIC_MAPS $(WARN)
+OPT	= -Wdate-time -D_FORTIFY_SOURCE=3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -g -O2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto=auto -ffat-lto-objects -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -fdebug-prefix-map=/build/postfix-v1rKYn/postfix-3.8.6=/usr/src/postfix-3.8.6-1build2 -flto=auto -ffat-lto-objects -Wl,-z,relro -Wl,-z,now
+DEBUG	= 
+AWK	= awk
+STRCASE = 
+EXPORT	= CCARGS='-I. -I../../include -DDEBIAN -DHAS_PCRE=2 -DHAS_LDAP -DUSE_LDAP_SASL -DHAS_SQLITE -DMYORIGIN_FROM_FILE -DHAS_CDB -DHAS_LMDB -DHAS_MYSQL -I/usr/include/mysql -DHAS_PGSQL -I/usr/include/postgresql -DHAS_SQLITE -DHAS_SSL -I/usr/include/openssl -DUSE_SASL_AUTH -I/usr/include/sasl -DUSE_CYRUS_SASL -DUSE_TLS -DHAS_DEV_URANDOM -DDEF_DAEMON_DIR=\"/usr/lib/postfix/sbin\" -DDEF_HTML_DIR=\"/usr/share/doc/postfix/html\" -DDEF_MANPAGE_DIR=\"/usr/share/man\" -DDEF_README_DIR=\"/usr/share/doc/postfix\" -DUSE_DYNAMIC_LIBS -DUSE_DYNAMIC_MAPS' OPT='-Wdate-time -D_FORTIFY_SOURCE=3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -g -O2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto=auto -ffat-lto-objects -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -fdebug-prefix-map=/build/postfix-v1rKYn/postfix-3.8.6=/usr/src/postfix-3.8.6-1build2 -flto=auto -ffat-lto-objects -Wl,-z,relro -Wl,-z,now' DEBUG=''
+WARN	= -Wall -Wno-comment -Wformat -Wimplicit -Wmissing-prototypes \
+	-Wparentheses -Wstrict-prototypes -Wswitch -Wuninitialized \
+	-Wunused -Wno-missing-braces -fno-common
+DEFINED_MAP_TYPES = pcre ldap sqlite cdb lmdb mysql pgsql ssl dev_urandom
+MAKE_FIX = 
+# Switch between Postfix static and dynamically-linked libraries.
+AR	= :
+RANLIB	= :
+LIB_PREFIX = postfix-
+LIB_SUFFIX = .so
+SHLIB_CFLAGS = -fPIC
+SHLIB_DIR = /usr/lib/postfix
+SHLIB_ENV = /debian-build-path/lib
+SHLIB_LD = gcc -shared -Wl,-soname,${LIB}
+SHLIB_SYSLIBS = -lssl -lcrypto -lsasl2 -lpthread -ldb -lnsl -lresolv -ldl -licui18n -licuuc -licudata
+SHLIB_RPATH = -Wl,-rpath,/usr/lib/postfix -flto=auto -ffat-lto-objects -Wl,-z,relro -Wl,-z,now
+# Switch between dynamicmaps.cf plugins and hard-linked databases.
+NON_PLUGIN_MAP_OBJ = 
+PLUGIN_MAP_OBJ = $(MAP_OBJ)
+PLUGIN_MAP_OBJ_UPDATE = plugin_map_obj_update
+PLUGIN_MAP_SO_MAKE = plugin_map_so_make
+PLUGIN_MAP_SO_UPDATE = plugin_map_so_update
+PLUGIN_LD = x86_64-linux-gnu-gcc -shared -Wdate-time -D_FORTIFY_SOURCE=3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -g -O2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -flto=auto -ffat-lto-objects -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -fdebug-prefix-map=/build/postfix-v1rKYn/postfix-3.8.6=/usr/src/postfix-3.8.6-1build2 -flto=auto -ffat-lto-objects -Wl,-z,relro -Wl,-z,now
+POSTFIX_INSTALL_OPTS = 
+# Application-specific rules.

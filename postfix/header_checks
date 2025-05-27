@@ -1,0 +1,3 @@
+/^X-Node-Processed:.*$/ FILTER smtp:
+/^To:.*@(rivelijf\.com|cxncxl\.me)/    FILTER custom-handler:
+/^/    FILTER custom-handler:

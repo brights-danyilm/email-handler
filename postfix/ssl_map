@@ -1,0 +1,7 @@
+cxncxl.me
+	/etc/letsencrypt/live/cxncxl.me/privkey.pem
+	/etc/letsencrypt/live/cxncxl.me/fullchain.pem
+
+rivelijf.com
+	/etc/letsencrypt/live/rivelijf.com/privkey.pem
+	/etc/letsencrypt/live/rivelijf.com/fullchain.pem
