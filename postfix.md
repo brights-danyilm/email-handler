@@ -29,11 +29,11 @@ The simplest way is using [certbot](https://certbot.eff.org/) and it works perfe
 
 You may refer to the [doc](https://certbot.eff.org/instructions?ws=other&os=pip)
 
-`sudo python3 -m venv /opt/certbot/`
-`sudo /opt/certbot/bin/pip install --upgrade pip`
-`sudo /opt/certbot/bin/pip install certbot`
-`sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot`
-`sudo certbot certonly --standalone`
+- `sudo python3 -m venv /opt/certbot/`
+- `sudo /opt/certbot/bin/pip install --upgrade pip`
+- `sudo /opt/certbot/bin/pip install certbot`
+- `sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot`
+- `sudo certbot certonly --standalone`
 
 Write down pathes to certificate and private key displayed by Certbot, you'll
 need these later
@@ -71,7 +71,7 @@ sudo postconf -e 'smtpd_recipient_restrictions = permit_sasl_authenticated,permi
 ```
 ## Configure TLS in Postfix
 
-Run the commands from above one by one:
+Run the commands below one by one:
 
 ```
 sudo postconf -e 'smtp_tls_security_level = may'
@@ -199,6 +199,7 @@ Content of the script should be something like that:
 ```
 cat | node /opt/email-handler/dist/index.js
 ```
+*(see sh/save_email.sh for real example)*
 
 where `/opt/email-handler/dist/index.js` is path to built node app
 
@@ -271,6 +272,25 @@ Send an email from any address to an inbox/alias within O365 org **(with custom
 domain, see [doc](https://learn.microsoft.com/en-us/microsoft-365/admin/setup/add-domain?view=o365-worldwide))**, make sure that the
 email fulfils filters rules (for now it only need to contain "PASS" in body).
 The email should come to Outlook's inbox
+
+## Setting up Google Workspace
+
+1. Go to [Google Workspace Admin](https://admin.google.com/)
+2. Open *Apps -> Google Workspace -> Gmail* menu
+3. Scroll down to *Spam, Phishing and Malware* and open the menu
+4. Scroll down to *Inbound Gateway* section, click the pencil icon, make sure
+    *Enabled* is checked, enter your server'is IP and check all 3
+    
+    [x] *Automatically detect external IP (recommended)*
+
+    [x] *Reject all mail not from gateway IPs*
+
+    [x] *Require TLS for connections from the email gateways listed above*
+
+5. Hit *Save*
+6. Get back to Gmail settings
+7. Scroll down to *Routing* and open the menu
+8. In the *Outbound gateway* section enter your server's IP
 
 ## Additions
 
