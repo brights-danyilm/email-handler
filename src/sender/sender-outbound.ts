@@ -14,6 +14,9 @@ export class SenderOutbound implements Sender {
             host: '127.0.0.1',
             port: 25,
             secure: false,
+            tls: {
+                rejectUnauthorized: false,
+            },
             auth: undefined,
         });
     }
