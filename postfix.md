@@ -214,27 +214,46 @@ custom-handler unix - n n - - pipe
 
 this will tell postfix to route emails to this script on behalf of user `nobody`
 
-3. in `/etc/postfix/main.cf` add line
-
-`transport_maps = hash:/etc/postfix/transport`
-
-so emails will be routed using transport config
-
-4. create file `/etc/postfix/transport` with the following content:
+3. Create file `header_checks` with the following content:
 
 ```
-your-domain.com custom-handler:
+/^X-Node-Processed:.*$/ FILTER smtp:
+/^To:.*@(your-domain\.com)/    FILTER custom-handler:
+/^/    FILTER custom-handler:
 ```
+This will tell Postfix the following:
 
-Run
+- if email has header `X-Node-Processed` (set by [outbound sender](src/sender/sender-outbound.ts)) -- process
+    email with `smtp:` transport (send it to the internet)
+- if email has header `To` with value `.*@your-domain.com` (any email on your domain)
+    then process it with `cusom-handler:` transport (call the Node.JS script)
+- by default, for every email invoke the `custom-handler:` transport (call the
+    Node.JS script)
 
-`sudo postmap /etc/postfix/transport`
+4. In `main.cf` add lines
 
-4. in `/etc/postfix/main.cf` add line
+```
+header_checks = 
+    regexp:/etc/postfix/header_checks
+```
+this will tell Postfix to run header checks against every email using RegExp
+rules defined in file `header_checks`
+
+5. Install dependency `postfix-pcre`
+
+`sudo apt install postfix-pcre`
+
+which is required for enabling RegExp in Postfix configs
+
+6. in `/etc/postfix/main.cf` add line
 
 `local_recipient_maps = `
 
 this will tell Postfix to ignore check for user/alias existence
+
+7. Restart Postfix
+
+`sudo systemctl reload postfix`
 
 ## Permissions
 
