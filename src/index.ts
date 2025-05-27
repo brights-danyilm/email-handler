@@ -25,7 +25,7 @@ if (!emailBody) {
 Email.fromString(emailBody).then(email => {
     // email sent to one of our domains, means it is inbound
     if (receiver.endsWith(process.env.O365_DOMAIN)
-        && receiver.endsWith(process.env.GOOGLE_DOMAIN)) {
+        || receiver.endsWith(process.env.GOOGLE_DOMAIN)) {
             new Router(logger).route(email);
         }
 
