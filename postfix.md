@@ -294,6 +294,8 @@ The email should come to Outlook's inbox
 
 ## Additions
 
+*for relevant, real-world settings refer to `postfix` dir in the repo*
+
 ### My `main.cf` file:
 
 ```
