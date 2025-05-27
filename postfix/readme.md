@@ -1,3 +1,5 @@
+# Content of /etc/postfix dir
+
 This directory contains copy of my postfix config files
 
 These are tested and working fine
