@@ -21,6 +21,8 @@ putting an email to an inbox
 
 [See dedicated doc](postfix.md)
 
+See [config copy](postfix)
+
 **TODO: Put all this into a Docker**
 
 ## App setup
@@ -39,15 +41,15 @@ Set variables in .env:
 
 # Architecture
 
-`index.ts` is an entrypoint. It is called by Postfix with email content (raw string)
+[index.ts](src/index.ts) is an entrypoint. It is called by Postfix with email content (raw string)
 passed as an argument
 
-index parses the email into an object (`src/model/email.ts`) and passes it to
-Router (`src/handler/router.ts`)
+index parses the email into an object ([src/model/email.ts](src/model/email.ts)) and passes it to
+Router ([src/handler/router.ts](src/handler/router.ts))
 
 Router is something like startegy pattern, depending on some conditions it
-routes the email to Handler (`src/handler/handler.ts`) with specific Filter
-(`src/handler/filter.ts`) and callbacks for actions on succesful or insuccesful
+routes the email to Handler ([src/handler/handler.ts](src/handler/handler.ts)) with specific Filter
+([src/handler/filter.ts](src/handler/filter.ts)) and callbacks for actions on succesful or insuccesful
 filtering result. Filter is the core buiness logic unit, it is responsible for
 deciding either the email is good to pass or not. Handler is responsible for
 performing actions for email passing or dropping
