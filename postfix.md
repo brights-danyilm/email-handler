@@ -262,6 +262,65 @@ to `nobody` under group `nogroup`
 
 `sudo chown nobody:nogroup <file>`
 
+## DKIM & SPF
+
+In order to follow anti-spam verifications and be able to deliver outbound mail,
+we need to set up [DKIM and SPF](https://www.cloudflare.com/learning/email-security/dmarc-dkim-spf/)
+
+### SPF
+
+1. Go to your domain registrator/DNS settings
+2. Create a new DNS record:
+    - Type: `TXT`
+    - Host: `@` (or whatever is root)
+    - Value: `v=spf1 include:_spf.google.com ip4:<your-servers-ip> ~all`
+
+### DKIM
+
+1. Run `sudo apt install opendkim opendkim-tools`
+2. Edit file `/etc/opendkim.conf`, enter:
+```
+Syslog                 yes
+UMask                   002
+Domain                 tealventures-ai.com
+KeyFile                 /etc/opendkim/keys/<your-domain>/default.private
+Selector               default
+Socket                 inet:8891@localhost
+```
+
+3. Run `mkdir -p /etc/opendkim/keys/<your-domain>`
+4. `cd /etc/opendkim/keys/<your-domain>`
+5. `opendkim-genkey -s default -d <your-domain>`
+6. `chown opendkim:opendkim *`
+7. Open `default.txt` with any editor or `cat` it, you'll something like
+```
+default._domainkey      IN      TXT     ( "v=DKIM1; h=sha256; k=rsa; "
+          "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvDXIS+OMeOPOIuB7hUL551nkmJV2vLN+BHBWvkz/h9K/c+dgJfoi6N1ojjF7gOeUWI6Wn/E+1ERA994nxZQFUW/dnsqe+r/mrV4p9V0ER0Xp4xHpgp2S8FH04qVuVd+YTx2po3EGnf4LqzJPH9o4SW6Y4kxgC2m2fNMRc39g8mG+z6I4CeGo29hHIuWEY4ILm+CU6cvJ1JC+0P"
+          "dHKakwgkBlRLgSPsK9XENTD7iGZQ3qe7ax3EipLoQNVcsRHd48K0DtGpYLZdohYOrPp+xh+d+xuZl41dtR48a89baUx4YGzx0KMN7O526fpQ1P46bZGoH33mfPL8lMSfMjP4YxawIDAQAB" )  ; ----- DKIM key default for your domain
+```
+8. In your DNS settings create a new record with
+    - Type: TXT
+    - Host: `default._domainkey`
+    - Value: copy all 3 entries in quotes (") wihtout quotes themselves. E.g. `v=DKIM1; h=sha256; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvDXIS+OMeOPOIuB7hUL551nkmJV2vLN....` (copy entire `p` value)
+9. Update postfix settings:
+    - `postconf -e "milter_protocol = 6"`
+    - `postconf -e "milter_default_action = accept"`
+    - `postconf -e "smtpd_milters = inet:localhost:8891"`
+    - `postconf -e "non_smtpd_milters = inet:localhost:8891"`
+    - `sudo systemctl reload postfix`
+10. Open `/etc/opendkim.conf`
+11. Find line saying `Socket local:/run/opendkim/opendkim.sock`
+12. Comment it out by putting `#` as the first character
+13. Uncomment the line below (`Socket inet:8891@localhost`)
+14. `sudo systemctl reload opendkim`
+
+### DMARC
+
+1. Add a new DNS record:
+    - Type: `TXT`
+    - Host: `_dmarc`
+    - Value: `v=DMARC1; p=quarantine; rua=postmaster@<your-domain>`
+
 ## Setting up Outlook for receiving inbound emails from the relay
 
 In order to have Outlook (Office 365) not rejecting emails forwarded through
