@@ -21,13 +21,15 @@ export abstract class Handler {
         }
     }
 
+    /** called when filter allows the email to be delivered */
     protected abstract handlePass(email: Email): Promise<void>;
+    /** called when filter does not allow the email */
     protected abstract handleDrop(email: Email): Promise<void>;
 }
 
 export class EmtpyHandler extends Handler {
-    protected override async handlePass(email: Email): Promise<void> {}
-    protected override async handleDrop(email: Email): Promise<void> {}
+    protected override async handlePass(): Promise<void> {}
+    protected override async handleDrop(): Promise<void> {}
 }
 
 export class GeneralHandler extends Handler {
@@ -50,5 +52,5 @@ export class GeneralHandler extends Handler {
         }
     }
 
-    protected override async handleDrop(email: Email): Promise<void> {}
+    protected override async handleDrop(): Promise<void> {}
 }

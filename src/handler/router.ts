@@ -6,7 +6,11 @@ import { Logger } from '../util/logger';
 import { DummyFilter } from './filter';
 import { GeneralHandler } from './handler';
 
-export class Router {
+export interface IRouter {
+    route(email: Email): Promise<void>
+}
+
+export class Router implements IRouter {
     constructor(
         private logger: Logger,
     ) {}
@@ -19,7 +23,7 @@ export class Router {
      *
      * @todo implement real logic
      */
-    public route(email: Email) {
+    public async route(email: Email) {
         new GeneralHandler(
             new DummyFilter(),
             this.logger,
@@ -30,7 +34,7 @@ export class Router {
     }
 }
 
-export class OutboundRouter {
+export class OutboundRouter implements IRouter {
     constructor(
         private logger: Logger,
     ) {}
@@ -43,7 +47,7 @@ export class OutboundRouter {
      *
      * @todo implement real logic
      */
-    public route(email: Email) {
+    public async route(email: Email) {
         new GeneralHandler(
             new DummyFilter(),
             this.logger,

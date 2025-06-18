@@ -19,7 +19,7 @@ export class SenderGoogle implements Sender {
     
     async send(email: Email): Promise<SenderResult> {
         try {
-            this.transport.sendMail({
+            await this.transport.sendMail({
                 to: email.to,
                 from: email.from.join(', '),
                 sender: email.from[0],
@@ -29,11 +29,12 @@ export class SenderGoogle implements Sender {
 
             await this.logger.info('Email sent', email);
         } catch (e) {
-            this.logger.error('Sending email', e, email);
+            this.logger.error('Error while sending email', e, email);
+            return new SenderResult({ success: false });
         }
 
         return new SenderResult({
-            success: false,
+            success: true,
         });
     }
 }
