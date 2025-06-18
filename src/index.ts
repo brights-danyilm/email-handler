@@ -22,7 +22,7 @@ if (!emailBody) {
     logger.fatal('No email body passed');
 }
 
-Email.fromString(emailBody).then(email => {
+Email.fromString(emailBody, receiver).then(email => {
     // email sent to one of our domains, means it is inbound
     if (receiver.endsWith(process.env.O365_DOMAIN)
         || receiver.endsWith(process.env.GOOGLE_DOMAIN)) {

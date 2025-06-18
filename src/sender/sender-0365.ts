@@ -20,7 +20,10 @@ export class SenderOffice365 implements Sender {
     async send(email: Email): Promise<SenderResult> {
         try {
             await this.transport.sendMail({
-                to: email.receiver,
+                to: email.to,
+                envelope: {
+                    to: email.receiver,
+                },
                 from: email.from.join(', '),
                 sender: email.from[0],
                 subject: email.subject,
