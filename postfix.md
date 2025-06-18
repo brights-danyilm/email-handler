@@ -182,7 +182,7 @@ iptables -A INPUT -p tcp --dport 25 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 25 -j ACCEPT
 ```
 
-## Configuring Postfix to Node interaction
+# Configuring Postfix to Node interaction
 
 By default Postfix puts email it receives to /var/mail/<user> file and if 
 there's no such user, it throws an error
@@ -197,7 +197,7 @@ To do so:
 1. Create a bash script in any shared directory (for instance, `/usr/local/bin/save_mail.sh`)
 Content of the script should be something like that:
 ```
-cat | node /opt/email-handler/dist/index.js
+cat | env $(cat /opt/email-handler/.env | xargs) node /opt/email-handler/dist/index.js "$1"
 ```
 *(see [save_mail.sh](sh/save_mail.sh) for real example)*
 
@@ -209,7 +209,7 @@ this script will call the app passing content of the email to stdin
 
 ```
 custom-handler unix - n n - - pipe
-  flags=Rq user=nobody argv=/usr/local/bin/save_mail.sh
+  flags=Rq user=nobody argv=/usr/local/bin/save_mail.sh ${recipient}
   ```
 
 this will tell postfix to route emails to this script on behalf of user `nobody`

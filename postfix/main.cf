@@ -84,6 +84,7 @@ header_checks =
 # enable receiving for any email addresses (no check for alias or user)
 # mydestination =
 local_recipient_maps =
+
 smtp_bind_address = 95.111.243.142
 milter_protocol = 6
 milter_default_action = accept
