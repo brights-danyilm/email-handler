@@ -7,7 +7,7 @@ import { DefaultLogger } from './util/default-logger';
 
 config();
 
-const logger = new DefaultLogger(process.env.LOGS_PATH ?? './logs.txt');
+const logger = DefaultLogger.getInstance();
 
 const receiver = process.argv[2];
 if (!receiver) {
@@ -26,8 +26,8 @@ Email.fromString(emailBody).then(email => {
     // email sent to one of our domains, means it is inbound
     if (receiver.endsWith(process.env.O365_DOMAIN)
         || receiver.endsWith(process.env.GOOGLE_DOMAIN)) {
-            new Router(logger).route(email);
+            new Router().route(email);
         }
 
-    else new OutboundRouter(logger).route(email);
+    else new OutboundRouter().route(email);
 });

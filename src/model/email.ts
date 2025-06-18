@@ -1,5 +1,6 @@
 import { ParsedMail, simpleParser } from 'mailparser';
 import { Attachment } from './attachment';
+import { DefaultLogger } from '../util/default-logger';
 
 export class Email {
     /** @todo more fields */
@@ -56,6 +57,16 @@ export class Email {
         if (parsedEmail.html !== false) {
             body = parsedEmail.html;
         }
+
+        DefaultLogger.getInstance().info(
+            'Body:',
+            parsedEmail.html,
+        );
+
+        DefaultLogger.getInstance().info(
+            'Attachments:',
+            parsedEmail.attachments,
+        );
 
         return new Email(
             receivers,

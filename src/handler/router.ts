@@ -2,6 +2,7 @@ import { Email } from '../model/email';
 import { SenderOffice365 } from '../sender/sender-0365';
 import { SenderGoogle } from '../sender/sender-google';
 import { SenderOutbound } from '../sender/sender-outbound';
+import { DefaultLogger } from '../util/default-logger';
 import { Logger } from '../util/logger';
 import { DummyFilter } from './filter';
 import { GeneralHandler } from './handler';
@@ -11,9 +12,10 @@ export interface IRouter {
 }
 
 export class Router implements IRouter {
-    constructor(
-        private logger: Logger,
-    ) {}
+    private logger: Logger;
+    constructor() {
+        this.logger = DefaultLogger.getInstance();
+    }
 
     /**
      * Routes email to appropriate handler and filter
@@ -35,9 +37,10 @@ export class Router implements IRouter {
 }
 
 export class OutboundRouter implements IRouter {
-    constructor(
-        private logger: Logger,
-    ) {}
+    private logger: Logger;
+    constructor() {
+        this.logger = DefaultLogger.getInstance();
+    }
 
     /**
      * Routes email to appropriate handler and filter

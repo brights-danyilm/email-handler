@@ -2,10 +2,19 @@ import { appendFile } from 'fs';
 import { Logger, LoggerLevel } from './logger';
 
 export class DefaultLogger extends Logger {
-    constructor(
-        private logFilePath: string,
+    private constructor(
+        private logFilePath: string = process.env.LOGS_PATH ?? './log.txt',
     ) {
         super();
+    }
+
+    private static instance: Logger;
+    public static getInstance() {
+        if (!this.instance) {
+            this.instance = new DefaultLogger();
+        }
+
+        return this.instance;
     }
 
     private async writeToFile(
