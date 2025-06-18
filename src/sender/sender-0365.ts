@@ -33,6 +33,8 @@ export class SenderOffice365 implements Sender {
                     // 'In-Reply-To': email.inReplyTo,
                     'To': email.to.join(', '),
                 },
+                cc: email.cc,
+                bcc: email.cc,
                 attachments: email.attachments?.map(att => ({
                     filename: att.filename,
                     content: att.content,

@@ -39,6 +39,8 @@ export class SenderOutbound implements Sender {
                     // 'Reply-To': email.replyTo,
                     // 'In-Reply-To': email.inReplyTo,
                 },
+                cc: email.cc,
+                bcc: email.bcc,
                 attachments: email.attachments?.map(att => ({
                     filename: att.filename,
                     content: att.content,

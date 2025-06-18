@@ -14,6 +14,8 @@ export class Email {
         public readonly replyTo?: string,
         public readonly inReplyTo?: string,
         public readonly attachments?: Attachment[],
+        public readonly cc?: string[],
+        public readonly bcc?: string[],
     ) {}
 
     /**
@@ -52,6 +54,24 @@ export class Email {
             throw new Error('Email sent from nobody');
         }
 
+        const ccs = new Array<string>;
+        if (parsedEmail.cc) {
+            if (!Array.isArray(parsedEmail.cc)) {
+                ccs.push(parsedEmail.cc.text);
+            } else {
+                ccs.push(...parsedEmail.cc.map(addr => addr.text));
+            }
+        }
+
+        const bccs = new Array<string>;
+        if (parsedEmail.bcc) {
+            if (!Array.isArray(parsedEmail.bcc)) {
+                bccs.push(parsedEmail.bcc.text);
+            } else {
+                bccs.push(...parsedEmail.bcc.map(addr => addr.text));
+            }
+        }
+
         const senders = new Array<string>;
         if (!Array.isArray(parsedEmail.from)) {
             senders.push(parsedEmail.from.text);
@@ -79,6 +99,8 @@ export class Email {
                 att.content,
                 att.cid,
             )),
+            ccs,
+            bccs,
         );
     }
 

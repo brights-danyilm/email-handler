@@ -31,8 +31,9 @@ export class SenderGoogle implements Sender {
                 headers: {
                     // 'Reply-To': email.replyTo,
                     // 'In-Reply-To': email.inReplyTo,
-                    'To': email.to.join(', '),
                 },
+                cc: email.cc,
+                bcc: email.bcc,
                 attachments: email.attachments?.map(att => ({
                     filename: att.filename,
                     content: att.content,
