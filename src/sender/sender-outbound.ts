@@ -28,10 +28,19 @@ export class SenderOutbound implements Sender {
                 from: email.from.join(', '),
                 sender: email.from[0],
                 subject: email.subject,
-                text: email.body,
+                html: email.body,
                 headers: {
                     'X-Node-Processed': 'true',
+                    'Reply-To': email.replyTo,
+                    'In-Reply-To': email.inReplyTo,
                 },
+                attachments: email.attachments?.map(att => ({
+                    filename: att.filename,
+                    content: att.content,
+                    contentType: att.mimeType,
+                    contentDisposition: att.contentDisposition,
+                    cid: att.cid,
+                })),
             });
 
             await this.logger.info('Email sent', email);

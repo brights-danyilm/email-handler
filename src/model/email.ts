@@ -1,12 +1,16 @@
-import { ParsedMail, simpleParser } from "mailparser";
+import { ParsedMail, simpleParser } from 'mailparser';
+import { Attachment } from './attachment';
 
 export class Email {
     /** @todo more fields */
     constructor(
-        public to: string[],
-        public from: string[],
-        public subject?: string,
-        public body?: string,
+        public readonly to: string[],
+        public readonly from: string[],
+        public readonly subject?: string,
+        public readonly body?: string,
+        public readonly replyTo?: string,
+        public readonly inReplyTo?: string,
+        public readonly attachments?: Attachment[],
     ) {}
 
     /**
@@ -48,11 +52,25 @@ export class Email {
             senders.push(...parsedEmail.from.map(addr => addr.html));
         }
 
+        let body = parsedEmail.text;
+        if (parsedEmail.html !== false) {
+            body = parsedEmail.html;
+        }
+
         return new Email(
             receivers,
             senders,
             parsedEmail.subject,
-            parsedEmail.text,
+            body,
+            parsedEmail.replyTo?.value[0]?.address,
+            parsedEmail.inReplyTo,
+            parsedEmail.attachments.map(att => new Attachment(
+                att.contentType,
+                att.related ? 'inline' : 'attachment',
+                att.filename,
+                att.content,
+                att.cid,
+            )),
         );
     }
 
