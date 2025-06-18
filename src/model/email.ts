@@ -58,16 +58,6 @@ export class Email {
             body = parsedEmail.html;
         }
 
-        DefaultLogger.getInstance().info(
-            'Body:',
-            parsedEmail.html,
-        );
-
-        DefaultLogger.getInstance().info(
-            'Attachments:',
-            JSON.stringify(parsedEmail.attachments),
-        );
-
         return new Email(
             receivers,
             senders,
