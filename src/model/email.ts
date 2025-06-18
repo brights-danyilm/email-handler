@@ -4,6 +4,9 @@ import { Attachment } from './attachment';
 export class Email {
     /** @todo more fields */
     constructor(
+        /** receiver is to whom we will actually send the email */
+        public readonly receiver: string,
+        /** to is To: header, display only */
         public readonly to: string[],
         public readonly from: string[],
         public readonly subject?: string,
@@ -20,7 +23,7 @@ export class Email {
      * @return Email
      * @throws InvalidInputException if given string is not a valid email
      */
-    public static async fromString(text: string): Promise<Email> {
+    public static async fromString(text: string, receiver: string): Promise<Email> {
         let parsedEmail: ParsedMail;
 
         try {
@@ -62,6 +65,7 @@ export class Email {
         }
 
         return new Email(
+            receiver,
             receivers,
             senders,
             parsedEmail.subject,

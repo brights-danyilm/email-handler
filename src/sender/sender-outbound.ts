@@ -24,7 +24,7 @@ export class SenderOutbound implements Sender {
     async send(email: Email): Promise<SenderResult> {
         try {
             await this.transport.sendMail({
-                to: email.to,
+                to: email.receiver,
                 from: email.from.join(', '),
                 sender: email.from[0],
                 subject: email.subject,
@@ -33,6 +33,7 @@ export class SenderOutbound implements Sender {
                     'X-Node-Processed': 'true',
                     // 'Reply-To': email.replyTo,
                     // 'In-Reply-To': email.inReplyTo,
+                    'To': email.to.join(', '),
                 },
                 attachments: email.attachments?.map(att => ({
                     filename: att.filename,
