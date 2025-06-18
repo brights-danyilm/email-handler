@@ -1,6 +1,5 @@
 import { ParsedMail, simpleParser } from 'mailparser';
 import { Attachment } from './attachment';
-import { DefaultLogger } from '../util/default-logger';
 
 export class Email {
     /** @todo more fields */
@@ -25,7 +24,11 @@ export class Email {
         let parsedEmail: ParsedMail;
 
         try {
-            parsedEmail = await simpleParser(text);
+            parsedEmail = await simpleParser(text, {
+                // do not convert cid: attachments into base64-inlined
+                // this conversion breaks images
+                skipImageLinks: true,
+            });
         } catch (e) {
             const err = e as Error;
             throw new InvalidInputException(err.message, text);
