@@ -30,7 +30,7 @@ export class DefaultLogger extends Logger {
                     `[${level}]`,
                     text,
                     ...args,
-                ].join(' | '),
+                ].join(' | ') + '\n\n',
                 (err) => {
                     if (!err) res();
                     else rej(err);

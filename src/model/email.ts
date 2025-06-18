@@ -65,7 +65,7 @@ export class Email {
 
         DefaultLogger.getInstance().info(
             'Attachments:',
-            parsedEmail.attachments,
+            JSON.stringify(parsedEmail.attachments),
         );
 
         return new Email(

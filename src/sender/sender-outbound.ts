@@ -31,8 +31,8 @@ export class SenderOutbound implements Sender {
                 html: email.body,
                 headers: {
                     'X-Node-Processed': 'true',
-                    'Reply-To': email.replyTo,
-                    'In-Reply-To': email.inReplyTo,
+                    // 'Reply-To': email.replyTo,
+                    // 'In-Reply-To': email.inReplyTo,
                 },
                 attachments: email.attachments?.map(att => ({
                     filename: att.filename,
